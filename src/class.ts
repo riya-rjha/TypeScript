@@ -113,7 +113,7 @@ class Marks {
         else throw new Error("Parameters are not of number type!");
     }
 }
-
+ṇ
 const mm = new Marks();
 mm.setMarks = [1, 2, 3, 4];
 console.log(mm.getMarks);
