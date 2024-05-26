@@ -48,26 +48,58 @@ console.log(accessProps(margherita2));
 // It creates properties which may not be listed in the interface as a key
 // Eg
 
-console.log(margherita2['RRJ']); // returns undefined
-// Margherita2 is a type of NewObj 
+console.log(margherita2["RRJ"]); // returns undefined
+// Margherita2 is a type of NewObj
 // Hence, Index Signature
-
-
 
 // -------------------
 
 interface Student {
-    // Index Signature
-    [key: string]: number | string | boolean | string[] ,
-    Name: string, 
-    RollNo: number,
-    Class: string[]
-};
+  // Index Signature
+  [key: string]: number | string | boolean | string[];
+  Name: string;
+  RollNo: number;
+  Class: string[];
+}
 
 const HRJ: Student = {
-    Name: "Riya Ranjan Jha",
-    RollNo: 2073,
-    Class: ["2C", "A3"]
+  Name: "Harshit Ranjan Jha",
+  RollNo: 2073,
+  Class: ["2C", "A3"],
 };
 
-console.log(HRJ.Class); 
+console.log(HRJ.Class);
+
+// Using keyof & typeof
+
+interface newObjII {
+  //   [index: string]: number;
+}
+
+const newOb: newObjII = {
+  name: 32,
+  class: 42,
+};
+
+for (const key in newOb) {
+  // console.log(`${key} + ${newOb[key]}`); // String being used for type
+  console.log(`${key} + ${newOb[key as keyof newObjII]}`);
+  console.log(`${key} + ${newOb[key as keyof typeof newOb]}`);
+}
+
+// Different types
+
+type Stream = "Name" | "Class" | "Age";
+type girl = Record<Stream, number[]>; // Record - utility type (accepts key, value)
+
+const anotherObj: girl = {
+  Name: [3, 2],
+  Class: [13, 13],
+  Age: [23, 3],
+};
+
+console.log(anotherObj);
+
+for (const key in anotherObj) {
+    console.log(`${anotherObj[key as keyof girl]}`);
+}
