@@ -105,3 +105,6 @@ interface PizzaObject {
   for (const key in anotherObj) {
       console.log(`${anotherObj[key as keyof girl]}`);
   }
+
+
+  
