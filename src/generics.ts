@@ -70,59 +70,101 @@ const checkForObjectType = <T>(args: T): checkForObj<T> => {
   return { value: args, ans: true };
 };
 
-
 console.log(checkForObjectType({}));
-console.log(checkForObjectType({"Name": "RRJ"}));
+console.log(checkForObjectType({ Name: "RRJ" }));
 console.log(checkForObjectType([1, 3, 4]));
 
 // Extending properties of interface
 
 interface hasID {
-  id: number
+  id: number;
 }
 
-const anotherCheck = <T extends hasID>(args: T):number => {
-  return args.id
-}
+const anotherCheck = <T extends hasID>(args: T): number => {
+  return args.id;
+};
 
-console.log(anotherCheck({id: 1, "name": "RRJ"}));
+console.log(anotherCheck({ id: 1, name: "RRJ" }));
 // console.log(anotherCheck({"name": "RRJ"})); -> Error (Name property alone does not exist in hasID interface)
-
 
 const userArr = [
   {
-    "id": 2313,
-    "name": "Robert",
-    "address": {
-      "sector": 5,
-      "hno" : 320,
-      "lane": "Green Street"
-    }
+    id: 2313,
+    name: "Robert",
+    address: {
+      sector: 5,
+      hno: 320,
+      lane: "Green Street",
+    },
   },
   {
-    "id": 3987,
-    "name": "Drowney",
-    "address": {
-      "sector": 9,
-      "hno" : 318,
-      "lane": "Blue Street"
-    }
+    id: 3987,
+    name: "Drowney",
+    address: {
+      sector: 9,
+      hno: 318,
+      lane: "Blue Street",
+    },
   },
   {
-    "id": 2863,
-    "name": "Junior",
-    "address": {
-      "sector": 20,
-      "hno" : 106,
-      "lane": "Pink Street"
-    }
+    id: 2863,
+    name: "Junior",
+    address: {
+      sector: 20,
+      hno: 106,
+      lane: "Pink Street",
+    },
   },
 ];
 
 // More than one generics
 
-const getUserAddress = <T extends hasID, K extends keyof T>(user: T[], key: K): T[K][] => {
-  return user.map((user)=> user[key]);
-}
+const getUserAddress = <T extends hasID, K extends keyof T>(
+  user: T[],
+  key: K
+): T[K][] => {
+  return user.map((user) => user[key]);
+};
 
 console.log(getUserAddress(userArr, "name"));
+
+/* ```
+
+ Explanation: 
+  1. Create a user array dataset.
+  2. Create a function that excepts a user array and a key value to be searched
+  3. The function has a type T that has an ID + a type K which extends the keys of T
+  4. The function returns an array with index at key position
+  5. Within the function, map through every user and return the value of array at the given key index 
+  ```
+
+*/
+
+// Classes + Objects
+// Eg of Encapsulation + Index Signature + Generics Type variable
+
+class newStateObject<T> {
+  private ID: T;
+
+  // initialize ID by value of same type T
+  constructor(value: T) {
+    this.ID = value;
+  }
+
+  // Getter
+  get accessState(): T {
+    return this.ID;
+  }
+
+  // Setter
+  set newState(value: T) {
+    this.ID = value;
+  }
+}
+
+const objectOne = new newStateObject("RRJ");
+objectOne.accessState;
+console.log(objectOne.accessState);
+// objectOne.newState = 2; - Error (Number won't be assignable after string has been assigned)
+objectOne.newState = "HRJ";
+console.log(objectOne.accessState);
