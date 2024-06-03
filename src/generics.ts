@@ -38,7 +38,7 @@ const isTrue = <O>(args: O): { args: O; ans: boolean } => {
   }
   if (typeof args === "undefined" || args === null) {
     console.log(`${args} is not an object`);
-    return {args, ans: false};
+    return { args, ans: false };
   }
   console.log(`${args} is an object`);
   return { args, ans: !!args }; // Objects truthy in TS
@@ -51,3 +51,78 @@ console.log(isTrue([1, 3, 5]));
 console.log(isTrue(null));
 console.log(isTrue(true));
 console.log(isTrue(undefined));
+
+// Using an interface for generics
+interface checkForObj<T> {
+  value: T;
+  ans: boolean;
+}
+
+const checkForObjectType = <T>(args: T): checkForObj<T> => {
+  if (Array.isArray(args)) {
+    return { value: args, ans: false };
+  }
+
+  if (isObject(args) && !Object.keys(args as keyof T).length) {
+    return { value: args, ans: false };
+  }
+
+  return { value: args, ans: true };
+};
+
+
+console.log(checkForObjectType({}));
+console.log(checkForObjectType({"Name": "RRJ"}));
+console.log(checkForObjectType([1, 3, 4]));
+
+// Extending properties of interface
+
+interface hasID {
+  id: number
+}
+
+const anotherCheck = <T extends hasID>(args: T):number => {
+  return args.id
+}
+
+console.log(anotherCheck({id: 1, "name": "RRJ"}));
+// console.log(anotherCheck({"name": "RRJ"})); -> Error (Name property alone does not exist in hasID interface)
+
+
+const userArr = [
+  {
+    "id": 2313,
+    "name": "Robert",
+    "address": {
+      "sector": 5,
+      "hno" : 320,
+      "lane": "Green Street"
+    }
+  },
+  {
+    "id": 3987,
+    "name": "Drowney",
+    "address": {
+      "sector": 9,
+      "hno" : 318,
+      "lane": "Blue Street"
+    }
+  },
+  {
+    "id": 2863,
+    "name": "Junior",
+    "address": {
+      "sector": 20,
+      "hno" : 106,
+      "lane": "Pink Street"
+    }
+  },
+];
+
+// More than one generics
+
+const getUserAddress = <T extends hasID, K extends keyof T>(user: T[], key: K): T[K][] => {
+  return user.map((user)=> user[key]);
+}
+
+console.log(getUserAddress(userArr, "name"));
